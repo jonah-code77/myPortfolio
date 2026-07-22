@@ -1,0 +1,86 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require "app/app.php";
+
+use App\Core\Env;
+Env::load(BASE_PATH . '.env');
+
+use App\Core\JsonResApi;
+use App\Core\Router;
+use App\Http\Middleware\ApiMiddleware;
+use App\Http\Middleware\AuthMiddleware;
+// Get URL
+$url = $_GET['url'] ?? 'logIn';
+$method = $_SERVER['REQUEST_METHOD'];
+
+// Load routes
+require_once 'routes.php';
+require_once 'api.php';
+
+
+// RESOLVE ROUTE
+$routeKey = Router::resolve($method, $url);
+
+// Route not found
+if (!$routeKey) {
+    JsonResApi::Response([
+        "status" => "error",
+        "msg" => "Route Not Found"
+    ],404);
+    exit;
+}
+
+// Extract route data
+[$route, $params] = $routeKey;
+
+// Middleware Map
+function resolveMiddleware(string $name){
+    $map = [
+        'auth' => AuthMiddleware::class, 
+        'api' => ApiMiddleware::class
+    ];
+
+    if (!isset($map[$name])) {
+        throw new Exception("Middleware '$name' not found");
+    }
+
+    return $map[$name];
+}
+
+// Run middlewares
+foreach ($route['middleware'] as $middleware) {
+    $middlewareClass = resolveMiddleware($middleware);
+    (new $middlewareClass)->handle();
+}
+
+
+$controllerName = $route['controller'];
+$methodName = $route['method'];
+
+// Check if controller exists
+if (!class_exists($controllerName)) {
+    jsonResApi::Response([
+        "status" => "error",
+        "msg" => "Controller '$controllerName' not found"
+    ],500);
+    exit;
+}
+
+// Create controller instance
+$controller = new $controllerName();
+
+// Check if method exists
+if (!method_exists($controller, $methodName)) {
+    header("Content-Type: application/json");
+    jsonResApi::Response([
+        "status" => "error",
+        "msg" => "Method '$methodName' not found in $controllerName"
+    ],500);
+    exit;
+}
+
+
+call_user_func_array([$controller, $methodName], $params);
