@@ -1,0 +1,48 @@
+body{
+    background-color: #0d1117;
+    color: #c9d1d9;
+    padding-top: 70PX;
+}
+
+.navbar {
+    background-color: #0d1117;
+}
+
+.navbar-toggler .toggler-icon{
+    font-size: 1.8rem;
+    color: white;
+}
+.custom-toggler{
+    border: none;
+    background: transparent;
+}
+
+.toggle-line{
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: white;
+    border: 2px solid red;
+}
+
+.btn-outline-light {
+    border-color: #c9d1d9;
+    color: #c9d1d9;
+}
+
+.btn-outline-light:hover {
+    background-color: #c9d1d9;
+    color: #0d1117;
+}
+
+.card {
+    background-color: #161b22;
+    border: none;
+}
+
+.badge {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}

@@ -7,9 +7,9 @@ class Router{
     private static $currentPrefix = "";
     private static $currentController = '';
     private static $currentMiddleware = [];
-    private static string $currentRoute ;
+    private static string $currentRoute;
 
-    public static function group(string $prefix, $options,  $callBack){
+    public static function group(string $prefix, array $options,  $callBack){
         //to get the previous state of the group
         $prevPrefix = self::$currentPrefix;
         $prevController = self::$currentController;
@@ -40,32 +40,32 @@ class Router{
 
     //HTTP ROUTES
     //GET
-    public static function get(string $path, $handler, $middleware = []) { 
+    public static function get(string $path, array $handler, $middleware = []) { 
         self::addRoute('GET', $path, $handler, $middleware); 
     }
 
     //POST
-    public static function post($path, $handler, $middleware = []) {
+    public static function post(string $path, array $handler, $middleware = []) {
          self::addRoute('POST', $path, $handler, $middleware); 
     }
 
     //PUT(edit)
-    public static function put($path, $handler, $middleware = []) { 
+    public static function put(string $path, array $handler, $middleware = []) { 
         self::addRoute('PUT', $path, $handler, $middleware); 
     }
 
     //DELETE
-    public static function delete($path, $handler, $middleware = []) {
+    public static function delete(string $path, array $handler, $middleware = []) {
          self::addRoute('DELETE', $path, $handler, $middleware); 
     }
 
     //ANY
-    public static function any($path, $handler, $middleware = []) { 
+    public static function any(string $path, array $handler, $middleware = []) { 
         self::addRoute('ANY', $path, $handler, $middleware); 
     }
 
     //Add route
-    private static function addRoute($method, $path, $handler, $middleware){
+    private static function addRoute(string $method, string $path, array $handler, array $middleware){
         $fullPath = trim(self::$currentPrefix . '/' . trim($path, '/'), '/');
 
         // Controller + method

@@ -13,22 +13,23 @@ use App\Core\Router;
 use App\Http\Middleware\ApiMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 // Get URL
-$url = $_GET['url'] ?? 'logIn';
+$url = $_GET['url'] ?? '';
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Load routes
 require_once 'routes.php';
-require_once 'api.php';
+
 
 
 // RESOLVE ROUTE
 $routeKey = Router::resolve($method, $url);
 
+
 // Route not found
 if (!$routeKey) {
     JsonResApi::Response([
         "status" => "error",
-        "msg" => "Route Not Found"
+        "msg" => "Route Not Found "
     ],404);
     exit;
 }
