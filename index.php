@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require "app/app.php";
-
+//load env 
 use App\Core\Env;
 Env::load(BASE_PATH . '.env');
 
